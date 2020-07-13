@@ -26,7 +26,7 @@ class LLParser:
         self.actions = actions
         self.startingSymbol = startingSymbol
 
-    def parse(self, input: list, execute: bool=False, actions: dict=None):
+    def parse(self, input: list, execute: bool=False, explicitActions: bool=False, actions: dict=None) -> list:
         """
             Parses the input and returns the leftmost derivation. Potentialy executes actions.
 
@@ -37,11 +37,19 @@ class LLParser:
             
             execute: bool
                 If true, will execute rule actions after derivation. Will use object actions if the actions parameter is None
+
+            explicitActions: bool
+                If this is true, actions from the actions parameter or actions from this object will be used in place of actions in rules.
             
             actions: dict
+                If execute is False or if explicitActions is False, this is ignored.
                 Dictionary of actions (python functions) to be performed when using a rule (Rule:fuct). If the action is None, nothing will happen.
                 If this is None, instance (default) actions will be used.
-                If execute is False, this is ignored.
+
+            Returns
+            -------
+            list
+                Leftmost derivation
         """
         string = input.copy()
         stack = deque()
@@ -81,7 +89,14 @@ class LLParser:
         #potentialy execute actions
         if execute:
             for rule in derivation:
-                if self.actions[rule]:
-                    self.actions[rule]()
+                if explicitActions:
+                    if actions == None:
+                        if self.actions[rule]:
+                            self.actions[rule]()
+                    else:
+                        if actions[rule]:
+                            actions[rule]()
+                else:
+                    rule.getAction()()
         
         return derivation

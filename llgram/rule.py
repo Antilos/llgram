@@ -5,6 +5,7 @@ class Rule:
         self.left = ""
         self.right = list()
         self.first = set()
+        self.action = None
 
     def __repr__(self):
         return f"{self.left} -> {' '.join(self.right)}"
@@ -38,3 +39,9 @@ class Rule:
 
     def setFirst(self, val):
         self.first = val
+
+    def getAction(self):
+        return self.action
+    
+    def setAction(self, val):
+        self.action = val

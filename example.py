@@ -15,6 +15,6 @@ actions["A -> c"] = lambda : print("Hello!")
 parser = LLParser(table, startingSymbol, actions)
 
 with open("testInput.txt", "r") as fin:
-    derivation = parser.parse(fin.read().split(), True)
+    derivation = parser.parse(fin.read().split(), execute=True, explicitActions=True, actions=actions)
 
 print(derivation)
