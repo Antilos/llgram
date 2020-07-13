@@ -1,5 +1,5 @@
 # llgram
-llgram is a tool for generating ll(1) grammar parsing tables. It uses it's own grammar language and can export the table as both a json and a pickled python object
+llgram is a tool for generating ll(1) grammar parsing tables. It uses it's own grammar language and can export the table as both a json and a python dictionary.
 
 # llgram grammar language
 llgram expects a grammar in the following language:
@@ -27,7 +27,7 @@ F -> id
 ```
 
 # Using llgram
-To generate a parsing table, create a llgram.generation.TableGenerator object, passing a string containing the grammar. The object automaticaly parses the grammar at construction. The table can then be retrieved using the provided public methods.
+To generate a parsing table, create a llgram.generation.TableGenerator object, passing a string containing the grammar. The object automaticaly parses the grammar at construction. The table (and other useful objects, such as the grammars alphabet and first, empty, and follow sets) can then be retrieved using the provided public methods.
 
 ```
 from llgram.generation import TableGenerator
