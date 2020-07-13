@@ -73,6 +73,28 @@ class TableGenerator:
         """
         return self.__nonterminals.union(self.__terminals)
 
+    def getTerminals(self) -> set:
+        """
+            Returns terminals of the provided grammar
+
+            Returns
+            -------
+            set
+                Set of strings representing the terminals in this grammar
+        """
+        return self.__terminals
+
+    def getNonterminals(self) -> set:
+        """
+            Returns nonterminals of the provided grammar
+
+            Returns
+            -------
+            set
+                Set of strings representing the nonterminals in this grammar
+        """
+        return self.__nonterminals
+
     def getStartSymbol(self) -> str:
         """
             Returns the start symbol of this grammar
@@ -84,19 +106,49 @@ class TableGenerator:
         """
         return self.__startSymbol
 
-    def getFirstSets(self) -> list:
+    def getRuleFirstSets(self) -> dict:
         """
             Returns first sets of the rules (first sets of the left hand side strings).
 
             Returns
             -------
-            list
-                List of sets of strings representing the symbols in the first sets of rules.
+            dict
+                Dictionary with the entire rule string as a key and sets of strings representing the symbols in the first set of that rule as value.
         """
-        result = list()
-        for rule in self.__rules:
-            result.append(rule.getFirst())
-        return result
+        return {rule:rule.getFirst() for rule in self.__rules}
+
+    def getSymbolFirstSets(self) -> dict:
+        """
+            Returns first sets for all symbols.
+
+            Returns
+            -------
+            dict
+                Dictionary with symbols as keys and their first sets as values
+        """
+        return self.__firstSets
+
+    def getFollowSets(self) -> dict:
+        """
+            Returns follow sets for all nonterminals.
+
+            Returns
+            -------
+            dict
+                Dictionary with nonterminals as keys and their follow sets as values
+        """
+        return self.__followSets
+
+    def getEmptySets(self) -> dict:
+        """
+            Returns empty sets for all symbols.
+
+            Returns
+            -------
+            dict
+                Dictionary with symbols as keys and their empty sets as values
+        """
+        return self.__emptySets
 
     def __first(self, symbol):
         result = set()
