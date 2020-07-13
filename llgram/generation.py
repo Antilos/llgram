@@ -108,6 +108,17 @@ class TableGenerator:
         """
         return self.__startSymbol
 
+    def getRules(self) -> list:
+        """
+            Returns the list of rules
+
+            Returns
+            -------
+            list
+                List of rules in this grammar
+        """
+        return self.__rules
+
     def getRuleFirstSets(self) -> dict:
         """
             Returns first sets of the rules (first sets of the left hand side strings).
