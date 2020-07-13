@@ -25,3 +25,18 @@ T2 -> epsilon
 F -> ( E )
 F -> id
 ```
+
+# Using llgram
+To generate a parsing table, create a llgram.generation.TableGenerator object, passing a string containing the grammar. The object automaticaly parses the grammar at construction. The table can then be retrieved using the provided public methods.
+
+```
+from llgram.generation import TableGenerator
+
+finName = "testGrammar.txt"
+
+with open(finName, "r") as fin:
+    generator = TableGenerator(fin.read())
+
+with open("testTable.json", "w") as fout:
+    generator.printParsingTableAsJson(fout)
+```
