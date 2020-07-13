@@ -3,6 +3,7 @@ import logging
 import json
 
 from llgram import llexceptions as lle
+from llgram import constants as const
 
 logger = logging.getLogger('simple')
 logger.setLevel(logging.CRITICAL)
@@ -25,8 +26,8 @@ class TableGenerator:
         """
         lexer = Lexer()
 
-        self.__EPSILON_SYMBOL = "epsilon" #epsilon constant
-        self.__END_SYMBOL = "__$"
+        #constants.__EPSILON_SYMBOL = "epsilon" #epsilon constant
+        #const.END_SYMBOL = "__$"
 
         self.__terminals = set()
         self.__nonterminals = set()
@@ -197,7 +198,7 @@ class TableGenerator:
         changed = True
         for rule in self.__rules:
             rhs = rule.getRight()
-            if len(rhs) == 1 and self.__EPSILON_SYMBOL in rhs:
+            if len(rhs) == 1 and const.EPSILON_SYMBOL in rhs:
                 self.__emptySets[rule.getLeft()] = True
 
         while changed:
@@ -221,7 +222,7 @@ class TableGenerator:
 
     def __computeFollowSets(self):
         changed = True
-        self.__followSets[self.__startSymbol].add(self.__END_SYMBOL)
+        self.__followSets[self.__startSymbol].add(const.END_SYMBOL)
 
         while changed:
             changed = False
@@ -232,10 +233,10 @@ class TableGenerator:
                 for i, symbol in enumerate(rhs):
                     if symbol in self.__nonterminals:
                         logger.debug(f"  For symbol: {symbol}. Old follow={self.__followSets[symbol]}")
-                        if not(i+1 == len(rhs) or rhs[i+1] == self.__EPSILON_SYMBOL):
-                            if self.__followSets[symbol] != self.__followSets[symbol].union(self.__firstOfString(rhs[i+1:]).difference({self.__EPSILON_SYMBOL})):
+                        if not(i+1 == len(rhs) or rhs[i+1] == const.EPSILON_SYMBOL):
+                            if self.__followSets[symbol] != self.__followSets[symbol].union(self.__firstOfString(rhs[i+1:]).difference({const.EPSILON_SYMBOL})):
                                 logger.debug(f"    Add First of next ({rhs[i+1]}): {self.__firstOfString(rhs[i+1:])}")
-                                self.__followSets[symbol] = self.__followSets[symbol].union(self.__firstOfString(rhs[i+1:]).difference({self.__EPSILON_SYMBOL}))
+                                self.__followSets[symbol] = self.__followSets[symbol].union(self.__firstOfString(rhs[i+1:]).difference({const.EPSILON_SYMBOL}))
                                 changed = True
                         if self.__emptyOfString(rhs[i+1:]): # Symbol is at the end of production (is followed by an epsilon)
                             logger.debug(f"    Followed by epsilon.")
@@ -246,13 +247,13 @@ class TableGenerator:
                         logger.debug(f"  New follow={self.__followSets[symbol]}")
 
     def __computeParsingTable(self):
-        self.__table = {nonterminal:{terminal:None for terminal in self.__terminals.difference({self.__EPSILON_SYMBOL}).union({self.__END_SYMBOL})} for nonterminal in self.__nonterminals}
+        self.__table = {nonterminal:{terminal:None for terminal in self.__terminals.difference({const.EPSILON_SYMBOL}).union({const.END_SYMBOL})} for nonterminal in self.__nonterminals}
 
         for nonterminal in self.__nonterminals:
-            for terminal in self.__terminals.difference({self.__EPSILON_SYMBOL}).union({self.__END_SYMBOL}):
+            for terminal in self.__terminals.difference({const.EPSILON_SYMBOL}).union({const.END_SYMBOL}):
                 for rule in self.__rules:
                     if nonterminal == rule.getLeft():
-                        if (terminal in rule.getFirst()) or (self.__EPSILON_SYMBOL in rule.getFirst()) and (terminal in self.__followSets[nonterminal]):
+                        if (terminal in rule.getFirst()) or (const.EPSILON_SYMBOL in rule.getFirst()) and (terminal in self.__followSets[nonterminal]):
                             if self.__table[nonterminal][terminal] != None:
                                 raise lle.GrammarNotLL1Exception(nonterminal, terminal, self.__table[nonterminal][terminal], rule)
                             else:
