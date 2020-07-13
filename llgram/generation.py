@@ -398,17 +398,17 @@ class Lexer:
                     if token == "->":
                         state = 2
                     else:
-                        raise lle.LexicalException(lineCounter, "Only one symbol can appear on the left side of a rule.")
+                        raise lle.GrammarLexicalException(lineCounter, "Only one symbol can appear on the left side of a rule.")
                 elif state == 2: #reading right-hand side
                     if token == "->":
-                        raise lle.LexicalException(lineCounter, "Unexpected symbol '->'.")
+                        raise lle.GrammarLexicalException(lineCounter, "Unexpected symbol '->'.")
                     else:
                         curRule.appendRight(token)
                 elif state == 3: #reading start symbol
                     if token == "->":
-                        raise lle.LexicalException(lineCounter, "Unexpected symbol '->'.")
+                        raise lle.GrammarLexicalException(lineCounter, "Unexpected symbol '->'.")
                     elif token == "\n":
-                        raise lle.LexicalException(lineCounter, "No start symbol provided.")
+                        raise lle.GrammarLexicalException(lineCounter, "No start symbol provided.")
                     else:
                         startSymbol = token
                         explicitStartSymbol = True
