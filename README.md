@@ -14,12 +14,14 @@ llgram expects a grammar in the following language:
 + Lines starting with "#" will be ignored by the parser and can be used for comments. Inline comments are not currently supported.
 
 ## Example of grammar
-> E -> T E2
-> E2 -> + T E2
-> E2 -> epsilon
-> -> E
-> T -> F T2
-> T2 -> * F T2
-> T2 -> epsilon
-> F -> ( E )
-> F -> id
+```
+E -> T E2
+E2 -> + T E2
+E2 -> epsilon
+-> E
+T -> F T2
+T2 -> * F T2
+T2 -> epsilon
+F -> ( E )
+F -> id
+```
