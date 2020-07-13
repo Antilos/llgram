@@ -4,6 +4,7 @@ import json
 
 from llgram import llexceptions as lle
 from llgram import constants as const
+from llgram.rule import Rule
 
 logger = logging.getLogger('simple')
 logger.setLevel(logging.CRITICAL)
@@ -291,53 +292,6 @@ class TableGenerator:
                 indent of the json file, defaults to 4 spaces
         """
         json.dump(self.__table, fout, default=lambda o:o.__repr__(), indent=indent)
-
-
-
-class Rule:
-    def __init__(self):
-        """
-            Parameters
-            ----------
-            left : str
-                left hand side of this rule (should only be one token, as these are non-context grammars)
-            right : list(str)
-                right hand side of the rule (a list of tokens)
-        """
-        self.left = ""
-        self.right = list()
-        self.first = set()
-        self.follow = set()
-
-    def __repr__(self):
-        return f"{self.left} -> {' '.join(self.right)}"
-
-    def __str__(self):
-        return f"{self.left} -> {' '.join(self.right)}"
-
-    def getLeft(self):
-        return self.left
-
-    def setLeft(self, val):
-        self.left = val
-    
-    def getRight(self):
-        return self.right
-
-    def appendRight(self, val):
-        self.right.append(val)
-
-    def getFirst(self):
-        return self.first
-
-    def addFirst(self, val):
-        self.first.add(val)
-
-    def setFirst(self, val):
-        self.first = val
-
-    def addFollow(self, val):
-        self.follow.add(val)
 
 class Lexer:
     def __init__(self):
