@@ -1,11 +1,20 @@
 from llgram.generation import TableGenerator
-import logging
+from llgram.parsing import LLParser
 
-finName = "testGrammar.txt"
-
-with open(finName, "r") as fin:
+with open("testGrammar2.txt", "r") as fin:
     generator = TableGenerator(fin.read())
 
-with open("testTable.json", "w") as fout:
-    generator.printParsingTableAsJson(fout)
+table = generator.getParsingTable()
+startingSymbol = generator.getStartSymbol()
+rules = generator.getRules()
 
+actions = {rule:None for rule in rules}
+
+actions["A -> c"] = lambda : print("Hello!")
+
+parser = LLParser(table, startingSymbol, actions)
+
+with open("testInput.txt", "r") as fin:
+    derivation = parser.parse(fin.read().split(), True)
+
+print(derivation)
